@@ -17,13 +17,16 @@ export default function Home() {
   return (
     <Container>
       <Modal danger />
+
       <InputSearchContainer>
         <input type="text" placeholder="Search by name..." />
       </InputSearchContainer>
+
       <Header>
         <strong>3 contacts</strong>
         <Link to="/new">New contact</Link>
       </Header>
+
       <ListContainer>
         <header>
           <button type="button">
