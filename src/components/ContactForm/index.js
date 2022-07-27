@@ -11,7 +11,10 @@ export default function ContactForm({ buttonLabel }) {
   return (
     <Form>
       <FormGroup>
-        <Input placeholder="Name" />
+        <Input
+          placeholder="Name"
+          onChange={(event) => console.log(event.target.value)}
+        />
       </FormGroup>
 
       <FormGroup error="Email format is invalid">
