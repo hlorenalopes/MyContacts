@@ -13,6 +13,24 @@ export default function ContactForm({ buttonLabel }) {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [category, setCategory] = useState('');
+  const [errors, setErrors] = useState([]);
+
+  function handleNameChange(event) {
+    setName(event.target.value);
+
+    if (!event.target.value) {
+      setErrors((prevState) => [
+        ...prevState,
+        { field: 'name', message: 'Name is required.' },
+      ]);
+    } else {
+      setErrors((prevState) => prevState.filter(
+        (error) => error.field !== 'name',
+      ));
+    }
+  }
+
+  console.log(errors);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -28,11 +46,7 @@ export default function ContactForm({ buttonLabel }) {
   return (
     <Form onSubmit={handleSubmit}>
       <FormGroup>
-        <Input
-          placeholder="Name"
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-        />
+        <Input placeholder="Name" value={name} onChange={handleNameChange} />
       </FormGroup>
 
       <FormGroup>
