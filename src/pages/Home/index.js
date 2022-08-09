@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 
+import { useEffect, useState } from 'react';
 import {
   Container,
   InputSearchContainer,
@@ -13,6 +14,21 @@ import edit from '../../assets/images/icons/edit.svg';
 import trash from '../../assets/images/icons/trash.svg';
 
 export default function Home() {
+  const [contacts, setContacts] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3001/contacts')
+      .then(async (response) => {
+        const json = await response.json();
+        setContacts(json);
+      })
+      .catch((error) => {
+        console.log('error', error);
+      });
+  }, []);
+
+  console.log(contacts);
+
   return (
     <Container>
       <InputSearchContainer>
@@ -20,7 +36,11 @@ export default function Home() {
       </InputSearchContainer>
 
       <Header>
-        <strong>3 contacts</strong>
+        <strong>
+          {contacts.length}
+          {' '}
+          {contacts.length === 1 ? 'contact' : 'contacts'}
+        </strong>
         <Link to="/new">New contact</Link>
       </Header>
 
@@ -31,19 +51,23 @@ export default function Home() {
             <img src={arrow} alt="Arrow" />
           </button>
         </header>
+      </ListContainer>
 
-        <Card>
+      {contacts.map((contact) => (
+        <Card key={contact.id}>
           <div className="info">
             <div className="contact-name">
-              <strong>Mateus Siva</strong>
-              <small>Instagram</small>
+              <strong>{contact.name}</strong>
+              {contact.category_name && (
+                <small>{contact.category_name}</small>
+              )}
             </div>
-            <span>mateus@devacademy.com.br</span>
-            <span>(401) 999-9999</span>
+            <span>{contact.email}</span>
+            <span>{contact.phone}</span>
           </div>
 
           <div className="actions">
-            <Link to="/edit/123">
+            <Link to={`/edit/${contact.id}`}>
               <img src={edit} alt="Edit" />
             </Link>
             <button type="button">
@@ -51,19 +75,7 @@ export default function Home() {
             </button>
           </div>
         </Card>
-      </ListContainer>
+      ))}
     </Container>
   );
 }
-
-fetch('http://localhost:3001/contacts')
-  .then(async (response) => {
-    const json = await response.json();
-    console.log('response', response);
-    json.forEach((contact) => {
-      console.log(contact.name);
-    });
-  })
-  .catch((error) => {
-    console.log('error', error);
-  });
