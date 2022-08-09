@@ -5,7 +5,7 @@ import {
   Container,
   InputSearchContainer,
   Header,
-  ListContainer,
+  ListHeader,
   Card,
 } from './styles';
 
@@ -15,9 +15,10 @@ import trash from '../../assets/images/icons/trash.svg';
 
 export default function Home() {
   const [contacts, setContacts] = useState([]);
+  const [orderBy, setOrderBy] = useState('asc');
 
   useEffect(() => {
-    fetch('http://localhost:3001/contacts')
+    fetch(`http://localhost:3001/contacts?orderBy=${orderBy}`)
       .then(async (response) => {
         const json = await response.json();
         setContacts(json);
@@ -25,9 +26,13 @@ export default function Home() {
       .catch((error) => {
         console.log('error', error);
       });
-  }, []);
+  }, [orderBy]);
 
-  console.log(contacts);
+  function handleToggleOrderBy() {
+    setOrderBy(
+      (prevState) => (prevState === 'asc' ? 'desc' : 'asc'),
+    );
+  }
 
   return (
     <Container>
@@ -44,14 +49,12 @@ export default function Home() {
         <Link to="/new">New contact</Link>
       </Header>
 
-      <ListContainer>
-        <header>
-          <button type="button">
-            <span>Name</span>
-            <img src={arrow} alt="Arrow" />
-          </button>
-        </header>
-      </ListContainer>
+      <ListHeader orderBy={orderBy}>
+        <button type="button" onClick={handleToggleOrderBy}>
+          <span>Name</span>
+          <img src={arrow} alt="Arrow" />
+        </button>
+      </ListHeader>
 
       {contacts.map((contact) => (
         <Card key={contact.id}>
