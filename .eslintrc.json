@@ -21,6 +21,7 @@
     "implicit-arrow-linebreak": "off",
     "operator-linebreak": "off",
     "comma-dangle": "off",
-    "react/jsx-no-bind": "off"
+    "react/jsx-no-bind": "off",
+    "no-promise-executor-return": "off"
   }
 }
