@@ -39,8 +39,8 @@ export default function Home() {
         console.log('Name:', error.name);
         console.log('Message', error.message);
         console.log('Response', error.response);
-        console.log('Content-Type', error.getContentType());
-        console.log('Caught with catch', error);
+        console.log('Body', error.body);
+        console.log(error);
       } finally {
         setIsLoading(false);
       }

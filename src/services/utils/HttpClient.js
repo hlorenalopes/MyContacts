@@ -22,10 +22,7 @@ class HttpClient {
       return body;
     }
 
-    throw new APIError(
-      body?.error || `${response.status} - ${response.statusText}`,
-      response
-    );
+    throw new APIError(response, body);
   }
 }
 
