@@ -30,14 +30,7 @@ class HttpClient {
       headers.append('Content-Type', 'application/json');
     }
 
-    // If I wanted to use other headers
     if (options.headers) {
-      // First option
-      // Object.keys(options.headers).forEach((name) => {
-      //   headers.append(name, options.headers[name]);
-      // });
-
-      // Second option - better/prettier
       Object.entries(options.headers).forEach(([name, value]) => {
         headers.append(name, value);
       });
