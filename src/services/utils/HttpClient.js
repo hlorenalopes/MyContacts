@@ -6,41 +6,53 @@ class HttpClient {
     this.baseURL = baseURL;
   }
 
-  async get(path) {
-    await delay(500);
-
-    const response = await fetch(`${this.baseURL}${path}`);
-
-    let body = null;
-
-    const contentType = response.headers.get('Content-Type');
-    if (contentType.includes('application/json')) {
-      body = await response.json();
-    }
-
-    if (response.ok) {
-      return body;
-    }
-
-    throw new APIError(response, body);
+  get(path, options) {
+    return this.makeRequest(path, {
+      method: 'GET',
+      headers: options?.headers,
+    });
   }
 
-  async post(path, body) {
+  post(path, options) {
+    return this.makeRequest(path, {
+      method: 'POST',
+      body: options?.body,
+      headers: options?.headers,
+    });
+  }
+
+  async makeRequest(path, options) {
     await delay(500);
 
-    const headers = new Headers({
-      'Content-Type': 'application/json'
-    });
+    const headers = new Headers();
+
+    if (options.body) {
+      headers.append('Content-Type', 'application/json');
+    }
+
+    // If I wanted to use other headers
+    if (options.headers) {
+      // First option
+      // Object.keys(options.headers).forEach((name) => {
+      //   headers.append(name, options.headers[name]);
+      // });
+
+      // Second option - better/prettier
+      Object.entries(options.headers).forEach(([name, value]) => {
+        headers.append(name, value);
+      });
+    }
 
     const response = await fetch(`${this.baseURL}${path}`, {
-      method: 'POST',
-      body: JSON.stringify(body),
+      method: options.method,
+      body: JSON.stringify(options.body),
       headers,
     });
 
     let responseBody = null;
 
     const contentType = response.headers.get('Content-Type');
+
     if (contentType.includes('application/json')) {
       responseBody = await response.json();
     }
