@@ -17,7 +17,7 @@ export default function NewContact() {
 
       toast({
         type: 'success',
-        text: 'Contact added successfully.'
+        text: 'Contact added successfully.',
       });
     } catch {
       toast({
