@@ -35,6 +35,8 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [contactBeingDeleted, setContactBeingDeleted] = useState(null);
 
   const filteredContacts = useMemo(() => contacts.filter((contact) => (
     contact.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -73,18 +75,32 @@ export default function Home() {
     loadContacts();
   }
 
+  function handleDeleteContact(contact) {
+    setContactBeingDeleted(contact);
+    setIsDeleteModalVisible(true);
+  }
+
+  function handleCloseDeleteModal() {
+    setIsDeleteModalVisible(false);
+  }
+
+  function handleConfirmDeleteContact() {
+    console.log(contactBeingDeleted.id);
+  }
+
   return (
     <Container>
       <Loader isLoading={isLoading} />
 
       <Modal
         danger
-        title='Are you sure you want to delete the contact "Jane Doe"?'
+        visible={isDeleteModalVisible}
+        title={`Are you sure you want to delete the contact "${contactBeingDeleted?.name}"?`}
         confirmLabel="Delete"
-        onCancel={() => alert('Cancelled')}
-        onConfirm={() => alert('Confirmed')}
+        onCancel={handleCloseDeleteModal}
+        onConfirm={handleConfirmDeleteContact}
       >
-        <strong>Delete</strong>
+        <p>This action cannot be undone.</p>
       </Modal>
 
       {contacts.length > 0 && (
@@ -181,7 +197,10 @@ export default function Home() {
                 <Link to={`/edit/${contact.id}`}>
                   <img src={edit} alt="Edit" />
                 </Link>
-                <button type="button">
+                <button
+                  type="button"
+                  onClick={() => handleDeleteContact(contact)}
+                >
                   <img src={trash} alt="Delete" />
                 </button>
               </div>
