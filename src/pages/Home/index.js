@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable no-nested-ternary */
@@ -24,6 +25,7 @@ import magnifierQuestion from '../../assets/images/magnifier-question.svg';
 
 import Loader from '../../components/Loader';
 import Button from '../../components/Button';
+import Modal from '../../components/Modal';
 
 import ContactsService from '../../services/ContactsService';
 
@@ -74,6 +76,16 @@ export default function Home() {
   return (
     <Container>
       <Loader isLoading={isLoading} />
+
+      <Modal
+        danger
+        title='Are you sure you want to delete the contact "Jane Doe"?'
+        confirmLabel="Delete"
+        onCancel={() => alert('Cancelled')}
+        onConfirm={() => alert('Confirmed')}
+      >
+        <strong>Delete</strong>
+      </Modal>
 
       {contacts.length > 0 && (
         <InputSearchContainer>
